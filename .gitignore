@@ -1,0 +1,77 @@
+# STM32 standard .gitignore
+
+# Build directories
+[Bb]uild/
+[Dd]ebug/
+[Rr]elease/
+*.elf
+*.hex
+*.bin
+*.map
+*.lst
+*.o
+*.d
+*.obj
+*.dep
+
+# IDE specific
+.metadata/
+.settings/
+*.launch
+*.uvoptx
+*.uvprojx
+*.uvguix
+*.cproject
+*.project
+*.sublime-workspace
+*.sublime-project
+*.code-workspace
+
+# CubeMX
+*.mxproject
+
+# Keil
+*.uvopt
+*.uvproj
+*.bak
+*.uvgui.*
+
+# IAR
+*.ewd
+*.ewp
+*.ewt
+*.eww
+*.dep
+*.ewd2
+*.ewp2
+*.ewt2
+*.eww2
+
+# Atollic TrueSTUDIO
+.settings/
+.metadata/
+*.launch
+*.atproject
+*.cproject
+*.project
+
+# STM32CubeIDE
+*.log
+*.db
+*.ioc-backup
+
+# Misc
+*.pdsbak
+*.bak
+*.tmp
+*.swp
+*.swo
+*.swn
+*.pdf
+*.PDF
+
+# OS generated
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
