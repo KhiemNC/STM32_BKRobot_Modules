@@ -23,7 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "led7.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -94,9 +94,24 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  LED7_Init(
+		  &hspi1,
+		  LED_LATCH_GPIO_Port,
+		  LED_LATCH_Pin,
+		  LED7_EN1_GPIO_Port,
+		  LED7_EN1_Pin,
+		  LED7_EN2_GPIO_Port,
+		  LED7_EN2_Pin);
   while (1)
   {
-
+	for (int i = 1; i < 3; i++)
+	{
+		for (int j = 0; j < 10; j++)
+		{
+			LED7_DisplayDigit(j, i, 0);
+			HAL_Delay(1000);
+		}
+	}
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
