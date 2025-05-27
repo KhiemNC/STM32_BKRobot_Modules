@@ -24,7 +24,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "buzzer.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -96,8 +96,14 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  BUZZER_Init(&htim2, TIM_CHANNEL_1);
+  BUZZER_SetSound(440, 50);
   while (1)
   {
+	  BUZZER_Play();
+	  HAL_Delay(100);
+	  BUZZER_Stop();
+	  HAL_Delay(200);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
