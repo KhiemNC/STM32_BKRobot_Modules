@@ -27,12 +27,15 @@ static GPIO_TypeDef *LED7_EN1_GPIOx = NULL;
 static uint16_t LED7_EN1_GPIO_Pin = 0;
 static GPIO_TypeDef *LED7_EN2_GPIOx = NULL;
 static uint16_t LED7_EN2_GPIO_Pin = 0;
+static GPIO_TypeDef *LED8_EN_GPIOx = NULL;
+static uint16_t LED8_EN_GPIO_Pin = 0;
 
 void LED7_Init(
-    SPI_HandleTypeDef *hspi,
-    GPIO_TypeDef *LATCH_GPIOx, uint16_t LATCH_GPIO_Pin,
-    GPIO_TypeDef *EN1_GPIOx, uint16_t EN1_GPIO_Pin,
-    GPIO_TypeDef *EN2_GPIOx, uint16_t EN2_GPIO_Pin)
+		SPI_HandleTypeDef *hspi,
+		GPIO_TypeDef *LATCH_GPIOx, uint16_t LATCH_GPIO_Pin,
+		GPIO_TypeDef *EN1_GPIOx, uint16_t EN1_GPIO_Pin,
+		GPIO_TypeDef *EN2_GPIOx, uint16_t EN2_GPIO_Pin,
+		GPIO_TypeDef *LED_EN_GPIOx, uint16_t LED_EN_GPIO_Pin)
 {
 	LED7_hspi = hspi;
 	LED7_LATCH_GPIOx = LATCH_GPIOx;
@@ -41,9 +44,11 @@ void LED7_Init(
 	LED7_EN1_GPIO_Pin = EN1_GPIO_Pin;
 	LED7_EN2_GPIOx = EN2_GPIOx;
 	LED7_EN2_GPIO_Pin = EN2_GPIO_Pin;
+	LED8_EN_GPIOx = LED_EN_GPIOx;
+	LED8_EN_GPIO_Pin = LED_EN_GPIO_Pin;
 }
 
-void LED7_DisplayDigit(uint8_t digit, uint8_t position, uint8_t dot)
+void LED7_DisplayDigit(uint8_t digit, uint8_t position, uint8_t dot, uint8_t show_8leds)
 {
 	if (digit > 9 || position < 1 || position > 2) return;
 	if (dot != 0) dot = 1;
@@ -63,6 +68,9 @@ void LED7_DisplayDigit(uint8_t digit, uint8_t position, uint8_t dot)
 		HAL_GPIO_WritePin(LED7_EN2_GPIOx, LED7_EN2_GPIO_Pin, ENABLE); // EN2 ON
 	}
 
+	if (show_8leds == 0) HAL_GPIO_WritePin(LED8_EN_GPIOx, LED8_EN_GPIO_Pin, DISABLE);
+	else HAL_GPIO_WritePin(LED8_EN_GPIOx, LED8_EN_GPIO_Pin, ENABLE);
+
 	// Send segment data via SPI
 	HAL_SPI_Transmit(LED7_hspi, &seg, 1, 100);
 
@@ -71,18 +79,16 @@ void LED7_DisplayDigit(uint8_t digit, uint8_t position, uint8_t dot)
 	HAL_GPIO_WritePin(LED7_LATCH_GPIOx, LED7_LATCH_GPIO_Pin, GPIO_PIN_RESET);
 }
 
-void LED7_DisplayAny(uint8_t data, uint8_t position)
+void LED7_DisplayAny(uint8_t data, uint8_t show_digit1, uint8_t show_digit2, uint8_t show_8leds)
 {
-	if (position < 1 || position > 2) return;
+	if (show_digit1 == 0) HAL_GPIO_WritePin(LED7_EN1_GPIOx, LED7_EN1_GPIO_Pin, DISABLE);
+	else HAL_GPIO_WritePin(LED7_EN1_GPIOx, LED7_EN1_GPIO_Pin, ENABLE);
 
-	// Enable the correct digit (active low)
-	if (position == 1) {
-		HAL_GPIO_WritePin(LED7_EN1_GPIOx, LED7_EN1_GPIO_Pin, ENABLE); // EN1 ON
-		HAL_GPIO_WritePin(LED7_EN2_GPIOx, LED7_EN2_GPIO_Pin, DISABLE);   // EN2 OFF
-	} else {
-		HAL_GPIO_WritePin(LED7_EN1_GPIOx, LED7_EN1_GPIO_Pin, DISABLE);   // EN1 OFF
-		HAL_GPIO_WritePin(LED7_EN2_GPIOx, LED7_EN2_GPIO_Pin, ENABLE); // EN2 ON
-	}
+	if (show_digit2 == 0) HAL_GPIO_WritePin(LED7_EN2_GPIOx, LED7_EN2_GPIO_Pin, DISABLE);
+	else HAL_GPIO_WritePin(LED7_EN2_GPIOx, LED7_EN2_GPIO_Pin, ENABLE);
+
+	if (show_8leds == 0) HAL_GPIO_WritePin(LED8_EN_GPIOx, LED8_EN_GPIO_Pin, DISABLE);
+	else HAL_GPIO_WritePin(LED8_EN_GPIOx, LED8_EN_GPIO_Pin, ENABLE);
 
 	// Send segment data via SPI
 	HAL_SPI_Transmit(LED7_hspi, &data, 1, 100);
