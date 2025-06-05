@@ -89,21 +89,25 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_SPI1_Init();
-  MX_TIM2_Init();
+  MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  BUZZER_Init(&htim2, TIM_CHANNEL_1);
+  BUZZER_Init(&htim5, TIM_CHANNEL_1);
   BUZZER_SetSound(440, 50);
-  while (1)
+
+  for (int i = 0; i < 5; ++i)
   {
 	  BUZZER_Play();
-	  HAL_Delay(100);
+	  HAL_Delay(1000);
 	  BUZZER_Stop();
-	  HAL_Delay(200);
+	  HAL_Delay(1000);
+  }
+  while (1)
+  {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
