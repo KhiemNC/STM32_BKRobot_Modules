@@ -2,8 +2,6 @@
 
 static TIM_HandleTypeDef *buzzer_htim = NULL;
 static uint32_t buzzer_channel = 0;
-static uint32_t buzzer_freq = 0;
-static uint8_t buzzer_duty = 50;
 
 void BUZZER_Init(TIM_HandleTypeDef *htim, uint32_t channel)
 {
@@ -21,9 +19,6 @@ void BUZZER_Init(TIM_HandleTypeDef *htim, uint32_t channel)
 void BUZZER_SetSound(uint32_t freq, uint8_t duty)
 {
     if (!buzzer_htim) return;
-
-    buzzer_freq = freq;       // Store the frequency for reference
-    buzzer_duty = duty;       // Store the duty cycle for reference
 
     // Get the timer clock frequency (APB1 timers are clocked at 2x PCLK1 on STM32F1)
     uint32_t timer_clk = HAL_RCC_GetPCLK1Freq() * 2;
