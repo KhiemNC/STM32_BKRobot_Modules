@@ -23,7 +23,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "led7.h"
+#include "btn_sw.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -94,9 +95,62 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  LED7_Init(
+		  &hspi1,
+		  LED_LATCH_GPIO_Port,
+		  LED_LATCH_Pin,
+		  LED7_EN1_GPIO_Port,
+		  LED7_EN1_Pin,
+		  LED7_EN2_GPIO_Port,
+		  LED7_EN2_Pin,
+		  LED_EN_GPIO_Port,
+		  LED_EN_Pin);
+  BTN_SW_Init(&hspi1, INP_LOAD_GPIO_Port, INP_LOAD_Pin);
+
+  uint8_t led_array_state = 0b11111111;
   while (1)
   {
+	  if (BTN_SW_ReadButton(1) == 0)
+		  led_array_state &= ~(1 << 0);
+	  else
+		  led_array_state |= (1 << 0);
 
+	  if (BTN_SW_ReadButton(2) == 0)
+		  led_array_state &= ~(1 << 1);
+	  else
+		  led_array_state |= (1 << 1);
+
+	  if (BTN_SW_ReadButton(3) == 0)
+		  led_array_state &= ~(1 << 2);
+	  else
+		  led_array_state |= (1 << 2);
+
+	  if (BTN_SW_ReadButton(4) == 0)
+		  led_array_state &= ~(1 << 3);
+	  else
+		  led_array_state |= (1 << 3);
+
+	  if (BTN_SW_GetStateSwitch(1) == 0)
+		  led_array_state &= ~(1 << 4);
+	  else
+		  led_array_state |= (1 << 4);
+
+	  if (BTN_SW_GetStateSwitch(2) == 0)
+		  led_array_state &= ~(1 << 5);
+	  else
+		  led_array_state |= (1 << 5);
+
+	  if (BTN_SW_GetStateSwitch(3) == 0)
+		  led_array_state &= ~(1 << 6);
+	  else
+		  led_array_state |= (1 << 6);
+
+	  if (BTN_SW_GetStateSwitch(4) == 0)
+		  led_array_state &= ~(1 << 7);
+	  else
+		  led_array_state |= (1 << 7);
+
+	  LED7_DisplayAny(led_array_state, 0, 0, 1);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
